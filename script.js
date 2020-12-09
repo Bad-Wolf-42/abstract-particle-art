@@ -4,10 +4,12 @@ const ctx = canvas.getContext('2d');
 canvas.width = 550;
 canvas.height = 550;
 
-const maxParticles = 200;
+const maxParticles = 400;
 let particlesArray = [];
 
-squareSize = 50;
+let frame = 0;
+
+squareSize = 25;
 arrayDimensions = canvas.width / squareSize;
 
 const vectorField = new Array(arrayDimensions * arrayDimensions);
@@ -19,6 +21,17 @@ class Vector {
     // this.origin = [0, 0];
     this.x = Math.cos(this.theta);
     this.y = Math.sin(this.theta);
+    this.speed = 0.05; //0.1
+  }
+  update() {
+    this.theta += this.speed;
+    this.x = Math.cos(this.theta);
+    this.y = Math.sin(this.theta);
+  }
+  randomize() {
+    this.theta = Math.random() * Math.PI * 2;
+    this.x = Math.cos(this.theta);
+    this.y = Math.sin(this.theta);
   }
 }
 
@@ -26,14 +39,14 @@ class Particle {
   constructor() {
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height;
-    this.radius = 2;
-    this.hue = 'red';
+    this.radius = Math.abs(Math.random() * 6 - 2);
+    this.hue = Math.random() * 360;
     this.arrayX = Math.floor(this.x / squareSize);
     this.arrayY = Math.floor(this.y / squareSize);
     this.index = this.arrayY * arrayDimensions + this.arrayX;
   }
   draw() {
-    ctx.fillStyle = this.hue;
+    ctx.fillStyle = `hsla(${this.hue}, 100%, 50%, 1)`;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fill();
@@ -48,6 +61,10 @@ class Particle {
       let headingY = vectorField[this.index].y;
       this.x += headingX;
       this.y += headingY;
+    }
+    else {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
     }
   }
 }
@@ -74,12 +91,21 @@ function populateParticleArray() {
 }
 
 function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  //ctx.clearRect(0, 0, canvas.width, canvas.height);
   for (i = 0; i < particlesArray.length; i++) {
     particlesArray[i].update();
     particlesArray[i].draw();
   }
-  visualizeArray();
+  for (i = 0; i < vectorField.length; i++) {
+    vectorField[i].update();
+  }
+  if (frame % 200 === 0) {
+    for (i = 0; i < vectorField.length; i++) {
+      vectorField[i].randomize();
+    }
+  }
+  //visualizeArray();
+  frame++;
   requestAnimationFrame(animate);
 }
 
