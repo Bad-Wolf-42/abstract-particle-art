@@ -17,11 +17,9 @@ const vectorField = new Array(arrayDimensions * arrayDimensions);
 class Vector {
   constructor() {
     this.theta = Math.random() * Math.PI * 2;
-    // this.magnitude = 1;
-    // this.origin = [0, 0];
     this.x = Math.cos(this.theta);
     this.y = Math.sin(this.theta);
-    this.speed = 0.05; //0.1
+    this.speed = 0.05;
   }
   update() {
     this.theta += this.speed;
@@ -48,7 +46,7 @@ class Particle {
     this.index = this.arrayY * arrayDimensions + this.arrayX;
   }
   draw() {
-    ctx.fillStyle = `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, 1)`;
+    ctx.fillStyle = `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, 0.2)`;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fill();
