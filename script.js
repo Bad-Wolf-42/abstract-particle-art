@@ -40,13 +40,15 @@ class Particle {
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height;
     this.radius = Math.abs(Math.random() * 6 - 2);
-    this.hue = Math.random() * 360;
+    this.hue = Math.random() * 100 + 100;
+    this.saturation = Math.random() * 50 + 50;
+    this.lightness = Math.random() * 50 + 25;
     this.arrayX = Math.floor(this.x / squareSize);
     this.arrayY = Math.floor(this.y / squareSize);
     this.index = this.arrayY * arrayDimensions + this.arrayX;
   }
   draw() {
-    ctx.fillStyle = `hsla(${this.hue}, 100%, 50%, 1)`;
+    ctx.fillStyle = `hsla(${this.hue}, ${this.saturation}%, ${this.lightness}%, 1)`;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fill();
